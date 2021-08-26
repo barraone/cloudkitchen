@@ -71,19 +71,15 @@ public class Shelves {
 	private void move(Temp temp) {
 		final BlockingQueue<Order> queue = _shelves.get(temp).getQueue();
 		final BlockingQueue<Order> anyQueue = _shelves.get(Temp.ANY).getQueue();
-		
-		final Consumer<Order> consumer = new Consumer<Order>() {
-			@Override
-			public void accept(Order tt) {
-				synchronized (_shelves) {
-					if (queue.offer(tt)) {
-						anyQueue.remove(tt);
-						Logger.getAnonymousLogger().warning("Moved " + tt + " to " + tt.getTemp());
-					}
+		anyQueue.stream().filter(xx -> temp == xx.getTemp()).forEach(tt->{
+			synchronized (_shelves) {
+				if (queue.offer(tt)) {
+					anyQueue.remove(tt);
+					Logger.getAnonymousLogger().warning("Moved " + tt + " to " + tt.getTemp());
 				}
 			}
-		};
-		anyQueue.stream().filter(xx -> temp == xx.getTemp()).forEach(consumer);
+		}
+		);
 	}
 
 }

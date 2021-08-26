@@ -11,9 +11,7 @@ public class Shelf {
 	@Override
 	public String toString() {
 		final StringBuffer sb = new StringBuffer();
-		for (Order order : _queue) {
-			sb.append("\n\t").append(order.getName());
-		}
+		_queue.stream().forEach(order->sb.append("\n\t").append(order.getName()));
 		return _temp.toString() + sb.toString() + "\n";
 	}
 	public Shelf(Temp temp, int capacity) {
